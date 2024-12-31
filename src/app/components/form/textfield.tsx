@@ -48,7 +48,7 @@ const FormTextField: React.FC<FormInputProps> = ({
       render={({ field }) => (
         <FormItem className="space-y-0 w-full">
           {label && (
-            <FormLabel className="text-2xs text-gray-500">{label}</FormLabel>
+            <FormLabel className="text-xs text-gray-500">{label}</FormLabel>
           )}
           <FormControl>
             <Input
