@@ -3,17 +3,11 @@
 import * as React from "react";
 import {
   AudioWaveform,
-  BookOpen,
-  Bot,
   Command,
-  Frame,
   GalleryVerticalEnd,
   LayoutList,
-  Map,
   MonitorSpeaker,
-  PieChart,
   Settings2,
-  SquareTerminal,
 } from "lucide-react";
 
 import {
@@ -27,6 +21,7 @@ import { EntitiesSwitcher } from "./entities-switcher";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 import SidebarBrand from "./brand";
+import { usePathname } from "next/navigation";
 
 // This is sample data.
 const data = {
@@ -55,42 +50,41 @@ const data = {
   navMain: [
     {
       title: "Main",
-      url: "#",
+      url: "/",
       icon: LayoutList,
-      isActive: false,
       items: [
         {
           title: "Home",
-          url: "#",
+          url: "/",
         },
         {
           title: "Dashboard",
-          url: "#",
+          url: "/dashboard",
         },
         {
           title: "Insights",
-          url: "#",
+          url: "/insights",
         },
       ],
     },
     {
       title: "Manage",
-      url: "#",
+      url: "/manage",
       icon: MonitorSpeaker,
       items: [
         {
           title: "Entities",
-          url: "#",
+          url: "/manage/entities",
         },
         {
           title: "Devices",
-          url: "#",
+          url: "/manage/devices",
         },
       ],
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/settings",
       icon: Settings2,
       items: [
         {
@@ -99,15 +93,15 @@ const data = {
         },
         {
           title: "Account",
-          url: "/account",
+          url: "/settings/account",
         },
         {
           title: "Users",
-          url: "/users",
+          url: "/settings/users",
         },
         {
           title: "Entity Types",
-          url: "/entity-types",
+          url: "/settings/entity-types",
         },
       ],
     },
@@ -115,6 +109,8 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarBrand />
@@ -122,7 +118,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <EntitiesSwitcher entities={data.entities} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={data.navMain} pathname={pathname} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

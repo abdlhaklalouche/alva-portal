@@ -15,7 +15,7 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
   ...props
 }) => {
   return loading == true ? (
-    <Button disabled={loading} {...props}>
+    <Button {...props} disabled={loading}>
       <LoadingSpinner size={14} className="mx-1" />
       {text}
     </Button>

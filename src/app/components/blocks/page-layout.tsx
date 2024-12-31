@@ -12,7 +12,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import Ribbon from "./ribbon";
+import Ribbon, { RibbonActionItem } from "./ribbon";
 
 interface BreadcrumbItemProps {
   name: string;
@@ -23,6 +23,7 @@ interface PageLayoutProps {
   name: string;
   description: string;
   breadcrumbs: BreadcrumbItemProps[];
+  actions?: RibbonActionItem[];
   children?: ReactNode;
 }
 
@@ -30,6 +31,7 @@ export default function PageLayout({
   name,
   description,
   breadcrumbs,
+  actions = [],
   children,
 }: PageLayoutProps) {
   return (
@@ -48,7 +50,7 @@ export default function PageLayout({
                         {breadcrumb.name}
                       </BreadcrumbLink>
                     ) : (
-                      <BreadcrumbPage>Dashboard</BreadcrumbPage>
+                      <BreadcrumbPage>{breadcrumb.name}</BreadcrumbPage>
                     )}
                   </BreadcrumbItem>
                   {index + 1 < breadcrumbs.length && <BreadcrumbSeparator />}
@@ -59,7 +61,7 @@ export default function PageLayout({
         </div>
       </header>
       <div className="h-full flex flex-1 flex-col">
-        <Ribbon />
+        <Ribbon actions={actions} />
         <div className="max-w-lg p-4 space-y-1">
           <h2 className="text-xl font-semibold">{name}</h2>
           <p className="text-sm text-gray-500">{description}</p>
