@@ -41,8 +41,8 @@ export default function PageLayout({
           <Breadcrumb>
             <BreadcrumbList>
               {breadcrumbs.map((breadcrumb, index) => (
-                <React.Fragment>
-                  <BreadcrumbItem key={index}>
+                <React.Fragment key={index}>
+                  <BreadcrumbItem>
                     {breadcrumb.link ? (
                       <BreadcrumbLink href="/">
                         {breadcrumb.name}

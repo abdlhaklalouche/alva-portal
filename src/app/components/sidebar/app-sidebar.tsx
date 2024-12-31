@@ -105,6 +105,10 @@ const data = {
           title: "Users",
           url: "/users",
         },
+        {
+          title: "Entity Types",
+          url: "/entity-types",
+        },
       ],
     },
   ],
