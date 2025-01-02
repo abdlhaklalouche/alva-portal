@@ -10,15 +10,11 @@ export default () => {
       description="Change account details."
       breadcrumbs={[
         {
-          name: "Home",
-          link: "/",
+          name: "Settings",
+          link: "/settings",
         },
         {
-          name: "Account Settings",
-          link: "/settings/account",
-        },
-        {
-          name: "Users",
+          name: "Account",
         },
       ]}
       actions={[

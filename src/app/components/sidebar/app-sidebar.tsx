@@ -8,6 +8,7 @@ import {
   LayoutList,
   MonitorSpeaker,
   Settings2,
+  Shield,
 } from "lucide-react";
 
 import {
@@ -22,6 +23,7 @@ import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 import SidebarBrand from "./brand";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/authcontext";
 
 // This is sample data.
 const data = {
@@ -65,20 +67,9 @@ const data = {
           title: "Insights",
           url: "/insights",
         },
-      ],
-    },
-    {
-      title: "Manage",
-      url: "/manage",
-      icon: MonitorSpeaker,
-      items: [
         {
           title: "Entities",
-          url: "/manage/entities",
-        },
-        {
-          title: "Devices",
-          url: "/manage/devices",
+          url: "/entities",
         },
       ],
     },
@@ -95,13 +86,24 @@ const data = {
           title: "Account",
           url: "/settings/account",
         },
+      ],
+    },
+    {
+      title: "Sys Admin",
+      url: "/sys-admin",
+      icon: Shield,
+      items: [
         {
           title: "Users",
-          url: "/settings/users",
+          url: "/sys-admin/users",
         },
         {
           title: "Entity Types",
-          url: "/settings/entity-types",
+          url: "/sys-admin/entity-types",
+        },
+        {
+          title: "Entities",
+          url: "/sys-admin/entities",
         },
       ],
     },
@@ -118,7 +120,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <EntitiesSwitcher entities={data.entities} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} pathname={pathname} />
+        <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

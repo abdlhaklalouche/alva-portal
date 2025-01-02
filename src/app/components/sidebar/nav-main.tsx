@@ -28,41 +28,22 @@ type NavMainItemProps = {
   }[];
 };
 
-export function NavMain({
-  items,
-  pathname,
-}: {
-  pathname: string;
-  items: NavMainItemProps[];
-}) {
+export function NavMain({ items }: { items: NavMainItemProps[] }) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item, index) => (
-          <NavMainItem key={index} item={item} pathname={pathname} />
+          <NavMainItem key={index} item={item} />
         ))}
       </SidebarMenu>
     </SidebarGroup>
   );
 }
 
-const NavMainItem = ({
-  pathname,
-  item,
-}: {
-  pathname: string;
-  item: NavMainItemProps;
-}) => {
-  const isActive = pathname.startsWith(item.url);
-
+const NavMainItem = ({ item }: { item: NavMainItemProps }) => {
   return (
-    <Collapsible
-      key={item.title}
-      asChild
-      defaultOpen={isActive}
-      className="group/collapsible"
-    >
+    <Collapsible key={item.title} asChild className="group/collapsible">
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
           <SidebarMenuButton tooltip={item.title}>
@@ -75,10 +56,7 @@ const NavMainItem = ({
           <SidebarMenuSub>
             {item.items?.map((subItem) => (
               <SidebarMenuSubItem key={subItem.title}>
-                <SidebarMenuSubButton
-                  isActive={pathname === subItem.url}
-                  asChild
-                >
+                <SidebarMenuSubButton asChild>
                   <a href={subItem.url}>
                     <span>{subItem.title}</span>
                   </a>

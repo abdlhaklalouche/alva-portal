@@ -26,6 +26,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/context/authcontext";
+import { useUsersActions } from "@/api/users";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 export function NavUser({
   user,
@@ -36,7 +40,30 @@ export function NavUser({
     avatar: string;
   };
 }) {
+  const router = useRouter();
   const { isMobile } = useSidebar();
+  const { signout, isSigningOut } = useUsersActions();
+
+  const handleSignout = () => {
+    if (isSigningOut) return;
+
+    signout(
+      {},
+      {
+        onSuccess: (data) => {
+          toast({ title: data.message, variant: "default" });
+
+          router.replace("/login");
+        },
+        onError: (error: any) => {
+          toast({
+            title: error?.response?.data?.message ?? error.message,
+            variant: "destructive",
+          });
+        },
+      }
+    );
+  };
 
   return (
     <SidebarMenu>
@@ -82,13 +109,9 @@ export function NavUser({
                 <Settings />
                 Settings
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSignout}>
               <LogOut />
               Log out
             </DropdownMenuItem>

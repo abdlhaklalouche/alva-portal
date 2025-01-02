@@ -86,3 +86,31 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+
+.ag-root-wrapper {
+  border-radius: 0 !important;
+}
+
+.ag-standard-button {
+  padding: 3px 12px !important;
+  font-size: small;
+}
+
+.ag-cell {
+  display: flex !important;
+  align-items: center;
+}
+
+.ag-header-row-column {
+  font-size: smaller;
+}
+
+.ag-cell-wrapper,
+.ag-cell-value {
+  width: 100%;
+}
+
+.ag-theme-quartz.bordered {
+  --ag-cell-horizontal-border: solid rgb(219, 219, 219);
+}

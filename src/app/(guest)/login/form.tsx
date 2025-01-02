@@ -7,11 +7,17 @@ import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as schema from "yup";
 import LoadingButton from "@/app/components/other/loading-button";
+import { useUsersActions } from "@/api/users";
+import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
 
 export default function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
+  const router = useRouter();
+  const { signin, isSigningIn } = useUsersActions();
+
   const methods = useForm({
     mode: "onSubmit",
     resolver: yupResolver(
@@ -24,7 +30,29 @@ export default function LoginForm({
 
   const { handleSubmit } = methods;
 
-  const onSubmit = (data: any) => {};
+  const onSubmit = (data: any) => {
+    if (isSigningIn) return;
+
+    signin(
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: (data) => {
+          toast({ title: data.message, variant: "default" });
+
+          router.replace("/");
+        },
+        onError: (error: any) => {
+          toast({
+            title: error?.response?.data?.message ?? error.message,
+            variant: "destructive",
+          });
+        },
+      }
+    );
+  };
 
   return (
     <form
@@ -65,7 +93,7 @@ export default function LoginForm({
               </a>
             </div>
           </div>
-          <LoadingButton type="submit" className="w-full">
+          <LoadingButton type="submit" className="w-full" loading={isSigningIn}>
             Login
           </LoadingButton>
           <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">

@@ -66,7 +66,7 @@ export default function PageLayout({
           <h2 className="text-xl font-semibold">{name}</h2>
           <p className="text-sm text-gray-500">{description}</p>
         </div>
-        <ScrollArea className="grow h-full overflow-auto px-4">
+        <ScrollArea className="grow h-full overflow-auto">
           {children}
         </ScrollArea>
       </div>
