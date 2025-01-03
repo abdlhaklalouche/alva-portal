@@ -8,15 +8,39 @@ import { ColDef } from "ag-grid-community";
 import { AgGridReact, CustomCellEditorProps } from "ag-grid-react";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import GridActions from "@/app/components/grid/gridactions";
+import {
+  entitiesKeys,
+  useEntitiesActions,
+  useGetEntities,
+} from "@/api/entities";
+import { useQueryClient } from "@tanstack/react-query";
+import Entity from "@/types/Entity";
+import { toast } from "@/hooks/use-toast";
+import Modal from "./modal";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
+type PageState = {
+  deletable: boolean;
+  open: boolean;
+  entity: Entity | null;
+};
+
 export default () => {
+  const queryClient = useQueryClient();
   const gridRef = React.useRef<AgGridReact>(null);
 
-  const [state, setState] = React.useState<{ deletable: boolean }>({
+  const [state, setState] = React.useState<PageState>({
     deletable: false,
+    open: false,
+    entity: null,
   });
+
+  const {
+    query: { data: entities, isLoading: isLoadingEntities },
+  } = useGetEntities();
+
+  const { deleteEntities, isDeletingEntities } = useEntitiesActions();
 
   const colDefs: ColDef[] = [
     {
@@ -26,7 +50,12 @@ export default () => {
       filter: false,
     },
     { field: "name", minWidth: 250, flex: 1 },
-    { field: "rooms", minWidth: 250 },
+    { field: "type.name", headerName: "type", minWidth: 250 },
+    {
+      field: "rooms",
+      valueGetter: ({ data }) => data.rooms?.length,
+      minWidth: 250,
+    },
     {
       field: "",
       headerName: "",
@@ -36,7 +65,13 @@ export default () => {
           actions={[
             {
               name: "Edit",
-              handleOnClick: (props) => {},
+              handleOnClick: ({ data }) => {
+                setState((prev) => ({
+                  ...prev,
+                  open: true,
+                  entity: data,
+                }));
+              },
             },
           ]}
         />
@@ -62,6 +97,35 @@ export default () => {
     gridRef.current!.api.setGridOption("quickFilterText", value);
   };
 
+  const handleDeleteEntities = () => {
+    if (isDeletingEntities) return;
+
+    const ids =
+      gridRef.current?.api.getSelectedRows().map((item) => item.id) ?? [];
+
+    deleteEntities(
+      {
+        ids: ids,
+      },
+      {
+        onSuccess: (data) => {
+          toast({ title: data.message, variant: "default" });
+        },
+        onError: (error: any) => {
+          toast({
+            title: error?.response?.data?.message ?? error.message,
+            variant: "destructive",
+          });
+        },
+        onSettled: () => {
+          queryClient.invalidateQueries({
+            queryKey: [entitiesKeys.get],
+          });
+        },
+      }
+    );
+  };
+
   return (
     <PageLayout
       name="Manage Entities"
@@ -77,16 +141,24 @@ export default () => {
       ]}
       actions={[
         {
-          type: "link",
+          type: "button",
           name: "New",
           icon: Plus,
-          href: "#",
+          onClick: () => {
+            setState((prev) => ({
+              ...prev,
+              open: true,
+              entity: null,
+            }));
+          },
         },
         {
           type: "button",
           name: "Delete",
           icon: Trash,
-          onClick: () => {},
+          disabled: !state.deletable,
+          loading: isDeletingEntities,
+          onClick: () => handleDeleteEntities(),
         },
       ]}
     >
@@ -97,7 +169,7 @@ export default () => {
         <div className="ag-theme-quartz h-full">
           <AgGridReact
             ref={gridRef}
-            rowData={[]}
+            rowData={entities?.data ?? []}
             columnDefs={colDefs}
             className="rounded-none"
             headerHeight={35}
@@ -117,6 +189,17 @@ export default () => {
           />
         </div>
       </div>
+      <Modal
+        entity={state.entity}
+        open={state.open}
+        handleClose={() => {
+          setState((prev) => ({
+            ...prev,
+            entity: null,
+            open: false,
+          }));
+        }}
+      />
     </PageLayout>
   );
 };
