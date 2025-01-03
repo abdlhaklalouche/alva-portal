@@ -22,6 +22,7 @@ export const EntityContextProvider = ({
 
   const setEntity = (entity: Entity) => {
     setActiveEntity(entity);
+    localStorage.setItem("entity", entity.id);
   };
 
   return (

@@ -11,9 +11,14 @@ export default function EntityProvider({
   user: CurrentUser;
   children: ReactNode;
 }) {
+  const entity_id = localStorage.getItem("entity") ?? "";
+
+  console.log(entity_id);
+
+  const entity =
+    user.entities.find((item) => item.id == entity_id) ?? user.entities[0];
+
   return (
-    <EntityContextProvider entity={user.entities[0]}>
-      {children}
-    </EntityContextProvider>
+    <EntityContextProvider entity={entity}>{children}</EntityContextProvider>
   );
 }
