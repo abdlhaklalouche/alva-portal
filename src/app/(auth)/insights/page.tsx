@@ -1,8 +1,12 @@
 "use client";
 
 import PageLayout from "@/app/components/blocks/page-layout";
+import { useEntity } from "@/context/entitycontext";
+import React from "react";
 
 export default () => {
+  const { entity } = useEntity();
+
   return (
     <PageLayout
       name="Insights"
@@ -16,6 +20,8 @@ export default () => {
           name: "Insights",
         },
       ]}
-    ></PageLayout>
+    >
+      <div className="p-4"></div>
+    </PageLayout>
   );
 };

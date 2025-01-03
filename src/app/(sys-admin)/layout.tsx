@@ -25,6 +25,18 @@ export default async function RootLayout({
     return redirect("/login");
   }
 
+  if (!user.is_system_admin) {
+    return (
+      <html lang="en">
+        <body className="h-screen flex flex-col bg-stone-50">
+          <div className="h-full flex justify-center items-center p-6 text-center">
+            <h1 className="text-3xl font-bold">Access Denied</h1>
+          </div>
+        </body>
+      </html>
+    );
+  }
+
   return (
     <html lang="en">
       <body className="h-screen flex flex-col bg-stone-50">

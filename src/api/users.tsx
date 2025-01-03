@@ -9,10 +9,22 @@ type SigninBody = {
   password: string;
 };
 
+type AddBody = {
+  is_system_admin: boolean;
+  name: string;
+  email: string;
+  password: string;
+};
+
+type UpdateBody = { id: boolean } & AddBody;
+
 export const usersKeys = {
   get: "users",
   signin: "signin",
   signout: "signout",
+  add: "users-add",
+  update: "users-update",
+  delete: "users-delete",
 };
 
 // Fetch all users
@@ -67,10 +79,47 @@ export const useUsersActions = () => {
     },
   });
 
+  //Add user
+  const { mutate: addUser, isPending: isAddingUser } = useMutation({
+    mutationKey: [usersKeys.add],
+    mutationFn: async (data: AddBody) => {
+      const response = await axios.put(`/users`, data);
+
+      return response.data;
+    },
+  });
+
+  //Update user
+  const { mutate: updateUser, isPending: isUpdatingUser } = useMutation({
+    mutationKey: [usersKeys.update],
+    mutationFn: async (data: UpdateBody) => {
+      const response = await axios.patch(`/users/${data.id}`, data);
+
+      return response.data;
+    },
+  });
+
+  //Delete users
+  const { mutate: deleteUsers, isPending: isDeletingUsers } = useMutation({
+    mutationKey: [usersKeys.delete],
+    mutationFn: async (data: any) => {
+      const response = await axios.post(`/users/delete`, data);
+
+      return response.data;
+    },
+  });
+
   return {
     signin,
     signout,
     isSigningIn,
     isSigningOut,
+
+    addUser,
+    updateUser,
+    deleteUsers,
+    isAddingUser,
+    isUpdatingUser,
+    isDeletingUsers,
   };
 };

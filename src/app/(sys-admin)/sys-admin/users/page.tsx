@@ -8,20 +8,35 @@ import { ColDef } from "ag-grid-community";
 import { AgGridReact, CustomCellEditorProps } from "ag-grid-react";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import GridActions from "@/app/components/grid/gridactions";
-import { useGetUsers } from "@/api/users";
+import { useGetUsers, usersKeys, useUsersActions } from "@/api/users";
+import Modal from "./modal";
+import User from "@/types/User";
+import { toast } from "@/hooks/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
+type PageState = {
+  deletable: boolean;
+  open: boolean;
+  user: User | null;
+};
+
 export default () => {
+  const queryClient = useQueryClient();
   const gridRef = React.useRef<AgGridReact>(null);
 
-  const [state, setState] = React.useState<{ deletable: boolean }>({
+  const [state, setState] = React.useState<PageState>({
     deletable: false,
+    open: false,
+    user: null,
   });
 
   const {
     query: { data, isLoading },
   } = useGetUsers();
+
+  const { deleteUsers, isDeletingUsers } = useUsersActions();
 
   const colDefs: ColDef[] = [
     {
@@ -48,7 +63,13 @@ export default () => {
           actions={[
             {
               name: "Edit",
-              handleOnClick: (props) => {},
+              handleOnClick: ({ data }) => {
+                setState((prev) => ({
+                  ...prev,
+                  open: true,
+                  user: data,
+                }));
+              },
             },
           ]}
         />
@@ -74,6 +95,35 @@ export default () => {
     gridRef.current!.api.setGridOption("quickFilterText", value);
   };
 
+  const handleDeleteUsers = () => {
+    if (isDeletingUsers) return;
+
+    const ids =
+      gridRef.current?.api.getSelectedRows().map((item) => item.id) ?? [];
+
+    deleteUsers(
+      {
+        ids: ids,
+      },
+      {
+        onSuccess: (data) => {
+          toast({ title: data.message, variant: "default" });
+        },
+        onError: (error: any) => {
+          toast({
+            title: error?.response?.data?.message ?? error.message,
+            variant: "destructive",
+          });
+        },
+        onSettled: () => {
+          queryClient.invalidateQueries({
+            queryKey: [usersKeys.get],
+          });
+        },
+      }
+    );
+  };
+
   return (
     <PageLayout
       name="Users"
@@ -92,14 +142,21 @@ export default () => {
           type: "button",
           name: "New",
           icon: Plus,
-          onClick: () => {},
+          onClick: () => {
+            setState((prev) => ({
+              ...prev,
+              open: true,
+              user: null,
+            }));
+          },
         },
         {
           type: "button",
           name: "Delete",
           icon: Trash,
           disabled: !state.deletable,
-          onClick: () => {},
+          loading: isDeletingUsers,
+          onClick: () => handleDeleteUsers(),
         },
       ]}
     >
@@ -130,6 +187,17 @@ export default () => {
           />
         </div>
       </div>
+      <Modal
+        user={state.user}
+        open={state.open}
+        handleClose={() => {
+          setState((prev) => ({
+            ...prev,
+            user: null,
+            open: false,
+          }));
+        }}
+      />
     </PageLayout>
   );
 };
