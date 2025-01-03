@@ -18,18 +18,19 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import Entity from "@/types/Entity";
+import DynamicIcon from "@/app/components/other/dynamicicon";
 
-export function EntitiesSwitcher({
-  entities,
-}: {
-  entities: {
-    name: string;
-    logo: React.ElementType;
-    type: string;
-  }[];
-}) {
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEntity } from "@/context/entitycontext";
+
+export function EntitiesSwitcher({ entities }: { entities: Entity[] }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const { isMobile } = useSidebar();
-  const [activeEntity, setActiveEntity] = React.useState(entities[0]);
+  const { entity, setEntity } = useEntity();
 
   return (
     <SidebarMenu>
@@ -41,13 +42,11 @@ export function EntitiesSwitcher({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <activeEntity.logo className="size-4" />
+                <DynamicIcon name={entity.type.icon} className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">
-                  {activeEntity.name}
-                </span>
-                <span className="truncate text-xs">{activeEntity.type}</span>
+                <span className="truncate font-semibold">{entity.name}</span>
+                <span className="truncate text-xs">{entity.type.name}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -61,16 +60,19 @@ export function EntitiesSwitcher({
             <DropdownMenuLabel className="text-xs text-muted-foreground">
               Entities
             </DropdownMenuLabel>
-            {entities.map((team, index) => (
+            {entities.map((entity, index) => (
               <DropdownMenuItem
-                key={team.name}
-                onClick={() => setActiveEntity(team)}
+                key={entity.id}
+                onClick={() => setEntity(entity)}
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
-                  <team.logo className="size-4 shrink-0" />
+                  <DynamicIcon
+                    name={entity.type.icon}
+                    className="size-4 shrink-0"
+                  />
                 </div>
-                {team.name}
+                {entity.name}
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
@@ -79,7 +81,7 @@ export function EntitiesSwitcher({
                 <Plus className="size-4" />
               </div>
               <div className="font-medium text-muted-foreground">
-                Add Entity
+                <a href="/entities">Add Entity</a>
               </div>
             </DropdownMenuItem>
           </DropdownMenuContent>

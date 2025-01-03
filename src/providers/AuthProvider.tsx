@@ -2,7 +2,7 @@
 
 import { AuthContextProvider } from "@/context/authcontext";
 import axios from "@/lib/axios";
-import User from "@/types/User";
+import CurrentUser from "@/types/CurrentUser";
 import React, { ReactNode } from "react";
 
 export default function AuthProvider({
@@ -11,7 +11,7 @@ export default function AuthProvider({
   children,
 }: {
   token: string;
-  user: User;
+  user: CurrentUser;
   children: ReactNode;
 }) {
   axios.interceptors.request.use((config) => {

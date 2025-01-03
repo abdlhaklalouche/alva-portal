@@ -6,6 +6,7 @@ import { useGetUser } from "@/api/users";
 import { getTokenFromCookies } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import AuthProvider from "@/providers/AuthProvider";
+import EntityProvider from "@/providers/EntityProvider";
 
 export default async function RootLayout({
   children,
@@ -27,12 +28,14 @@ export default async function RootLayout({
     <html lang="en">
       <body className="h-screen flex flex-col bg-stone-50">
         <AuthProvider user={user} token={token}>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset className="bg-transparent overflow-hidden flex flex-col h-full grow">
-              {children}
-            </SidebarInset>
-          </SidebarProvider>
+          <EntityProvider user={user}>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset className="bg-transparent overflow-hidden flex flex-col h-full grow">
+                {children}
+              </SidebarInset>
+            </SidebarProvider>
+          </EntityProvider>
         </AuthProvider>
       </body>
     </html>

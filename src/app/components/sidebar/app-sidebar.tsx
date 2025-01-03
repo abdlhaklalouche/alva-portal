@@ -25,105 +25,88 @@ import SidebarBrand from "./brand";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/authcontext";
 
-// This is sample data.
-const data = {
-  user: {
-    name: "Abdelhak Lallouche",
-    email: "abdlhaklalouche@gmail.com",
-    avatar: "/logo.jpg",
-  },
-  entities: [
-    {
-      name: "My House",
-      logo: GalleryVerticalEnd,
-      type: "House",
-    },
-    {
-      name: "Warehouse",
-      logo: AudioWaveform,
-      type: "Building",
-    },
-    {
-      name: "Office",
-      logo: Command,
-      type: "Building",
-    },
-  ],
-  navMain: [
-    {
-      title: "Main",
-      url: "/",
-      icon: LayoutList,
-      items: [
-        {
-          title: "Home",
-          url: "/",
-        },
-        {
-          title: "Dashboard",
-          url: "/dashboard",
-        },
-        {
-          title: "Insights",
-          url: "/insights",
-        },
-        {
-          title: "Entities",
-          url: "/entities",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "/settings",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "/settings",
-        },
-        {
-          title: "Account",
-          url: "/settings/account",
-        },
-      ],
-    },
-    {
-      title: "Sys Admin",
-      url: "/sys-admin",
-      icon: Shield,
-      items: [
-        {
-          title: "Users",
-          url: "/sys-admin/users",
-        },
-        {
-          title: "Entity Types",
-          url: "/sys-admin/entity-types",
-        },
-        {
-          title: "Entities",
-          url: "/sys-admin/entities",
-        },
-      ],
-    },
-  ],
-};
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
+  const { user } = useAuth();
+
+  const data = {
+    navMain: [
+      {
+        title: "Main",
+        url: "/",
+        icon: LayoutList,
+        hidden: false,
+        items: [
+          {
+            title: "Home",
+            url: "/",
+          },
+          {
+            title: "Dashboard",
+            url: "/dashboard",
+          },
+          {
+            title: "Insights",
+            url: "/insights",
+          },
+          {
+            title: "Entities",
+            url: "/entities",
+          },
+        ],
+      },
+      {
+        title: "Settings",
+        url: "/settings",
+        icon: Settings2,
+        hidden: false,
+        items: [
+          {
+            title: "General",
+            url: "/settings",
+          },
+          {
+            title: "Account",
+            url: "/settings/account",
+          },
+        ],
+      },
+      {
+        title: "Sys Admin",
+        url: "/sys-admin",
+        icon: Shield,
+        hidden: !user.is_system_admin,
+        items: [
+          {
+            title: "Users",
+            url: "/sys-admin/users",
+          },
+          {
+            title: "Entity Types",
+            url: "/sys-admin/entity-types",
+          },
+          {
+            title: "Entities",
+            url: "/sys-admin/entities",
+          },
+        ],
+      },
+    ],
+  };
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarBrand />
-      <SidebarHeader>
-        <EntitiesSwitcher entities={data.entities} />
-      </SidebarHeader>
+      {user.entities.length > 0 && (
+        <SidebarHeader>
+          <EntitiesSwitcher entities={user.entities} />
+        </SidebarHeader>
+      )}
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

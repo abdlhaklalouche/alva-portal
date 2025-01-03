@@ -1,5 +1,6 @@
 import useQueryFetch from "@/hooks/use-fetch";
 import axios from "@/lib/axios";
+import CurrentUser from "@/types/CurrentUser";
 import User from "@/types/User";
 import { useMutation } from "@tanstack/react-query";
 
@@ -39,7 +40,7 @@ export const useGetUser = async ({ token }: { token: string }) => {
       }
     );
 
-    return data.data as User;
+    return data.data as CurrentUser;
   } catch (error) {
     return undefined;
   }

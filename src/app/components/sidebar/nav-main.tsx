@@ -22,6 +22,7 @@ type NavMainItemProps = {
   title: string;
   url: string;
   icon?: LucideIcon;
+  hidden: boolean;
   items?: {
     title: string;
     url: string;
@@ -33,9 +34,10 @@ export function NavMain({ items }: { items: NavMainItemProps[] }) {
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item, index) => (
-          <NavMainItem key={index} item={item} />
-        ))}
+        {items.map(
+          (item, index) =>
+            !item.hidden && <NavMainItem key={index} item={item} />
+        )}
       </SidebarMenu>
     </SidebarGroup>
   );

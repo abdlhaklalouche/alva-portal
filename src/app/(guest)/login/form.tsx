@@ -42,7 +42,7 @@ export default function LoginForm({
         onSuccess: (data) => {
           toast({ title: data.message, variant: "default" });
 
-          router.replace("/");
+          location.replace("/");
         },
         onError: (error: any) => {
           toast({

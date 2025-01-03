@@ -1,14 +1,14 @@
 "use client";
 
-import User from "@/types/User";
+import CurrentUser from "@/types/CurrentUser";
 import React from "react";
 
 export const AuthContext = React.createContext<{
   token: string;
-  user: User;
+  user: CurrentUser;
 }>({
   token: "",
-  user: {} as User,
+  user: {} as CurrentUser,
 });
 
 export const AuthContextProvider = ({
@@ -17,7 +17,7 @@ export const AuthContextProvider = ({
   children,
 }: {
   token: string;
-  user: User;
+  user: CurrentUser;
   children: React.ReactNode;
 }) => {
   return (
