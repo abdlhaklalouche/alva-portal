@@ -89,6 +89,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Entities",
             url: "/sys-admin/entities",
           },
+          {
+            title: "Devices",
+            url: "/sys-admin/devices",
+          },
         ],
       },
     ],
