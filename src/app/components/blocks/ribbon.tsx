@@ -32,14 +32,13 @@ export default function Ribbon({
   const router = useRouter();
 
   const handleActionClick = (action: RibbonActionItem) => {
-    if (action.type === "link") {
-      router.push(action.href);
-      return;
-    }
-
-    if (action.type === "button") {
-      action.onClick();
-      return;
+    switch (action.type) {
+      case "link":
+        router.push(action.href);
+        break;
+      case "button":
+        action.onClick();
+        break;
     }
   };
 

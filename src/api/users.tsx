@@ -22,6 +22,7 @@ export const usersKeys = {
   get: "users",
   signin: "signin",
   signout: "signout",
+  update_account: "users-account",
   add: "users-add",
   update: "users-update",
   delete: "users-delete",
@@ -79,6 +80,16 @@ export const useUsersActions = () => {
     },
   });
 
+  //Update Account
+  const { mutate: updateAccount, isPending: isUpdatingAccount } = useMutation({
+    mutationKey: [usersKeys.update_account],
+    mutationFn: async (data: any) => {
+      const response = await axios.patch(`/users/account`, data);
+
+      return response.data;
+    },
+  });
+
   //Add user
   const { mutate: addUser, isPending: isAddingUser } = useMutation({
     mutationKey: [usersKeys.add],
@@ -112,8 +123,10 @@ export const useUsersActions = () => {
   return {
     signin,
     signout,
+    updateAccount,
     isSigningIn,
     isSigningOut,
+    isUpdatingAccount,
 
     addUser,
     updateUser,
