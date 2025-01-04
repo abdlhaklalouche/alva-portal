@@ -28,6 +28,12 @@ export default () => {
       hidden: false,
     },
     {
+      title: "Devices",
+      subtitle: "Main",
+      url: "/devices",
+      hidden: false,
+    },
+    {
       title: "General Settings",
       subtitle: "Settings",
       url: "/settings",

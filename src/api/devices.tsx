@@ -32,6 +32,18 @@ export const useGetDevices = () => {
   return response;
 };
 
+// Fetch all user devices
+export const useGetUserDevices = () => {
+  const response = useQueryFetch<Device>({
+    key: [devicesKeys.get],
+    path: `/devices/u`,
+    autoFetch: true,
+    refetchOnWindowFocus: false,
+  });
+
+  return response;
+};
+
 export const useDevicesActions = () => {
   //Add device
   const { mutate: addDevice, isPending: isAddingDevice } = useMutation({
@@ -58,6 +70,47 @@ export const useDevicesActions = () => {
     mutationKey: [devicesKeys.delete],
     mutationFn: async (data: any) => {
       const response = await axios.post(`/devices/delete`, data);
+
+      return response.data;
+    },
+  });
+
+  return {
+    addDevice,
+    updateDevice,
+    deleteDevices,
+    isAddingDevice,
+    isUpdatingDevice,
+    isDeletingDevices,
+  };
+};
+
+export const useUserDevicesActions = () => {
+  //Add device
+  const { mutate: addDevice, isPending: isAddingDevice } = useMutation({
+    mutationKey: [devicesKeys.add],
+    mutationFn: async (data: AddBody) => {
+      const response = await axios.put(`/devices/u`, data);
+
+      return response.data;
+    },
+  });
+
+  //Update device
+  const { mutate: updateDevice, isPending: isUpdatingDevice } = useMutation({
+    mutationKey: [devicesKeys.update],
+    mutationFn: async (data: UpdateBody) => {
+      const response = await axios.patch(`/devices/u/${data.id}`, data);
+
+      return response.data;
+    },
+  });
+
+  //Delete device
+  const { mutate: deleteDevices, isPending: isDeletingDevices } = useMutation({
+    mutationKey: [devicesKeys.delete],
+    mutationFn: async (data: any) => {
+      const response = await axios.post(`/devices/u/delete`, data);
 
       return response.data;
     },

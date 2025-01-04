@@ -8,22 +8,22 @@ import { ColDef } from "ag-grid-community";
 import { AgGridReact, CustomCellEditorProps } from "ag-grid-react";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import GridActions from "@/app/components/grid/gridactions";
-import {
-  entitiesKeys,
-  useGetUserEntities,
-  useUserEntitiesActions,
-} from "@/api/entities";
 import { useQueryClient } from "@tanstack/react-query";
-import Entity from "@/types/Entity";
 import { toast } from "@/hooks/use-toast";
 import Modal from "./modal";
+import Device from "@/types/Device";
+import {
+  devicesKeys,
+  useGetUserDevices,
+  useUserDevicesActions,
+} from "@/api/devices";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 type PageState = {
   deletable: boolean;
   open: boolean;
-  entity: Entity | null;
+  device: Device | null;
 };
 
 export default () => {
@@ -33,28 +33,30 @@ export default () => {
   const [state, setState] = React.useState<PageState>({
     deletable: false,
     open: false,
-    entity: null,
+    device: null,
   });
 
   const {
-    query: { data: entities, isLoading: isLoadingEntities },
-  } = useGetUserEntities();
+    query: { data: devices, isLoading: isLoadingDevices },
+  } = useGetUserDevices();
 
-  const { deleteEntities, isDeletingEntities } = useUserEntitiesActions();
+  const { deleteDevices, isDeletingDevices } = useUserDevicesActions();
 
   const colDefs: ColDef[] = [
     {
       field: "id",
       headerName: "#",
       minWidth: 100,
+      maxWidth: 100,
       filter: false,
     },
+    { field: "status", minWidth: 100, maxWidth: 120 },
     { field: "name", minWidth: 250, flex: 1 },
-    { field: "type.name", headerName: "type", minWidth: 250 },
+    { field: "room.entity.name", headerName: "Entity", minWidth: 250 },
     {
-      field: "rooms",
-      valueGetter: ({ data }) => data.rooms?.length,
-      minWidth: 250,
+      field: "energies",
+      valueGetter: ({ data }) => data.energies?.length,
+      minWidth: 150,
     },
     {
       field: "",
@@ -69,7 +71,7 @@ export default () => {
                 setState((prev) => ({
                   ...prev,
                   open: true,
-                  entity: data,
+                  device: data,
                 }));
               },
             },
@@ -97,13 +99,13 @@ export default () => {
     gridRef.current!.api.setGridOption("quickFilterText", value);
   };
 
-  const handleDeleteEntities = () => {
-    if (isDeletingEntities) return;
+  const handleDeleteDevices = () => {
+    if (isDeletingDevices) return;
 
     const ids =
       gridRef.current?.api.getSelectedRows().map((item) => item.id) ?? [];
 
-    deleteEntities(
+    deleteDevices(
       {
         ids: ids,
       },
@@ -119,7 +121,7 @@ export default () => {
         },
         onSettled: () => {
           queryClient.invalidateQueries({
-            queryKey: [entitiesKeys.get],
+            queryKey: [devicesKeys.get],
           });
         },
       }
@@ -128,15 +130,15 @@ export default () => {
 
   return (
     <PageLayout
-      name="Manage Entities"
-      description="Manage your entities eg: Your house, office, etc.."
+      name="Manage Devices"
+      description="Manage your devices eg: Fridge, Over, etc.."
       breadcrumbs={[
         {
           name: "Main",
           link: "/",
         },
         {
-          name: "Entities",
+          name: "Devices",
         },
       ]}
       actions={[
@@ -148,7 +150,7 @@ export default () => {
             setState((prev) => ({
               ...prev,
               open: true,
-              entity: null,
+              device: null,
             }));
           },
         },
@@ -157,8 +159,8 @@ export default () => {
           name: "Delete",
           icon: Trash,
           disabled: !state.deletable,
-          loading: isDeletingEntities,
-          onClick: () => handleDeleteEntities(),
+          loading: isDeletingDevices,
+          onClick: () => handleDeleteDevices(),
         },
       ]}
     >
@@ -169,7 +171,7 @@ export default () => {
         <div className="ag-theme-quartz h-full">
           <AgGridReact
             ref={gridRef}
-            rowData={entities?.data ?? []}
+            rowData={devices?.data ?? []}
             columnDefs={colDefs}
             className="rounded-none"
             headerHeight={35}
@@ -190,7 +192,7 @@ export default () => {
         </div>
       </div>
       <Modal
-        entity={state.entity}
+        device={state.device}
         open={state.open}
         handleClose={() => {
           setState((prev) => ({

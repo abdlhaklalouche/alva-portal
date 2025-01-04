@@ -50,6 +50,18 @@ export const useGetEntities = () => {
   return response;
 };
 
+// Fetch all user entities
+export const useGetUserEntities = () => {
+  const response = useQueryFetch<Entity>({
+    key: [entitiesKeys.get],
+    path: `/entities/u`,
+    autoFetch: true,
+    refetchOnWindowFocus: false,
+  });
+
+  return response;
+};
+
 export const useEntitiesActions = () => {
   //Save entities types
   const { mutate: saveEntitiesTypes, isPending: isSavingEntitiesTypes } =
@@ -98,6 +110,49 @@ export const useEntitiesActions = () => {
     saveEntitiesTypes,
     isSavingEntitiesTypes,
 
+    addEntity,
+    updateEntity,
+    deleteEntities,
+    isAddingEntity,
+    isUpdatingEntity,
+    isDeletingEntities,
+  };
+};
+
+export const useUserEntitiesActions = () => {
+  //Add entity
+  const { mutate: addEntity, isPending: isAddingEntity } = useMutation({
+    mutationKey: [entitiesKeys.add],
+    mutationFn: async (data: AddBody) => {
+      const response = await axios.put(`/entities/u`, data);
+
+      return response.data;
+    },
+  });
+
+  //Update entity
+  const { mutate: updateEntity, isPending: isUpdatingEntity } = useMutation({
+    mutationKey: [entitiesKeys.update],
+    mutationFn: async (data: UpdateBody) => {
+      const response = await axios.patch(`/entities/u/${data.id}`, data);
+
+      return response.data;
+    },
+  });
+
+  //Delete entity
+  const { mutate: deleteEntities, isPending: isDeletingEntities } = useMutation(
+    {
+      mutationKey: [entitiesKeys.delete],
+      mutationFn: async (data: any) => {
+        const response = await axios.post(`/entities/u/delete`, data);
+
+        return response.data;
+      },
+    }
+  );
+
+  return {
     addEntity,
     updateEntity,
     deleteEntities,
