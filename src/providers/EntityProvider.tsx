@@ -13,8 +13,6 @@ export default function EntityProvider({
 }) {
   const entity_id = localStorage.getItem("entity") ?? "";
 
-  console.log(entity_id);
-
   const entity =
     user.entities.find((item) => item.id == entity_id) ?? user.entities[0];
 
