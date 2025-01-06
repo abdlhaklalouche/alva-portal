@@ -11,3 +11,8 @@ export const getTokenFromCookies = (store: ReadonlyRequestCookies): string => {
 
   return token ? `Bearer ${token}` : "";
 };
+
+export const getRandomBlackShade = () => {
+  const randomShade = Math.floor(Math.random() * 256);
+  return `rgb(${randomShade}, ${randomShade}, ${randomShade})`;
+};
