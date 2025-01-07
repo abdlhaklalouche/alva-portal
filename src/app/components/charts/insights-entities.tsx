@@ -1,15 +1,6 @@
 "use client";
 import * as React from "react";
-import { TrendingUp } from "lucide-react";
 import { Label, Pie, PieChart } from "recharts";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -17,43 +8,17 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { getRandomBlackShade } from "@/lib/utils";
+import { EntityConsumption } from "@/types/Insights";
 
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: getRandomBlackShade() },
-  { browser: "safari", visitors: 200, fill: getRandomBlackShade() },
-  { browser: "firefox", visitors: 287, fill: getRandomBlackShade() },
-  { browser: "edge", visitors: 173, fill: getRandomBlackShade() },
-  { browser: "other", visitors: 190, fill: getRandomBlackShade() },
-];
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "hsl(var(--chart-1))",
-  },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
+  consumption: {
+    label: "Consumption",
   },
 } satisfies ChartConfig;
 
-export function InsightsEntitiesChart() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
+export function InsightsEntitiesChart({ data }: { data: EntityConsumption[] }) {
+  const totalConsumption = React.useMemo(() => {
+    return data.reduce((acc, curr) => acc + curr.consumption, 0);
   }, []);
 
   return (
@@ -69,9 +34,9 @@ export function InsightsEntitiesChart() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
-              data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              data={data}
+              dataKey="consumption"
+              nameKey="entity"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -90,7 +55,7 @@ export function InsightsEntitiesChart() {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {totalConsumption.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}

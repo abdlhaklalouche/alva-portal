@@ -1,42 +1,21 @@
 "use client";
-import { TrendingUp } from "lucide-react";
-import { CartesianGrid, LabelList, Line, LineChart, XAxis } from "recharts";
+
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { month: "January", kwh: 186 },
-  { month: "February", kwh: 305 },
-  { month: "March", kwh: 237 },
-  { month: "April", kwh: 73 },
-  { month: "May", kwh: 209 },
-  { month: "June", kwh: 214 },
-  { month: "January", kwh: 186 },
-  { month: "February", kwh: 305 },
-  { month: "March", kwh: 237 },
-  { month: "April", kwh: 73 },
-  { month: "May", kwh: 209 },
-  { month: "June", kwh: 214 },
-];
+import { Consumption } from "@/types/Dashboard";
 
-export default function DashboardChart() {
+export default function DashboardChart({ data }: { data: Consumption[] }) {
   return (
     <div className="h-full flex flex-col">
       <div className="flex flex-col h-full grow items-center justify-center">
         <ChartContainer
           config={{
-            kwh: {
+            value: {
               label: "Kwh",
               color: "hsl(var(--foreground))",
             },
@@ -45,32 +24,40 @@ export default function DashboardChart() {
         >
           <LineChart
             accessibilityLayer
-            data={chartData}
+            data={data}
             margin={{
               left: 12,
               right: 12,
             }}
+            height={150}
+            width={200}
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="key"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               fontSize={10}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => {
+                const date = new Date(value);
+                return date.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                });
+              }}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
             <Line
-              dataKey="kwh"
+              dataKey="value"
               type="natural"
-              stroke="var(--color-kwh)"
+              stroke="var(--color-value)"
               strokeWidth={2}
               dot={{
-                fill: "var(--color-kwh)",
+                fill: "var(--color-value)",
               }}
               activeDot={{
                 r: 6,
