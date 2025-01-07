@@ -11,7 +11,7 @@ import notFound from "@/app/not-found";
 import React from "react";
 
 export default () => {
-  const [period, setPeriod] = React.useState<PeriodState>("week");
+  const [period, setPeriod] = React.useState<PeriodState>("month");
 
   const { data, isFetching, error } = useGetInsights({
     period: period,

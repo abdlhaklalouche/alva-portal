@@ -13,7 +13,7 @@ export const useGetDashboard = ({ period }: { period: PeriodState }) =>
   useQuery({
     queryKey: [insightsKeys.dashboard, period],
     queryFn: async () => {
-      const { data } = await axios.get(`/insights/dashboard`);
+      const { data } = await axios.get(`/insights/dashboard?period=${period}`);
 
       const responseData = data as Dashboard;
 
@@ -27,7 +27,7 @@ export const useGetInsights = ({ period }: { period: PeriodState }) =>
   useQuery({
     queryKey: [insightsKeys.insights, period],
     queryFn: async () => {
-      const { data } = await axios.get(`/insights`);
+      const { data } = await axios.get(`/insights?period=${period}`);
 
       const responseData = data as Insights;
 

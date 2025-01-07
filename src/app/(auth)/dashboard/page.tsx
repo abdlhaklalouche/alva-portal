@@ -10,7 +10,7 @@ import { Building, HomeIcon, MonitorSpeaker } from "lucide-react";
 import React from "react";
 
 export default () => {
-  const [period, setPeriod] = React.useState<PeriodState>("week");
+  const [period, setPeriod] = React.useState<PeriodState>("month");
 
   const { data, isFetching, error } = useGetDashboard({
     period: period,

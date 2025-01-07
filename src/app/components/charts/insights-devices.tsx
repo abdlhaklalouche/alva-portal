@@ -19,7 +19,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function InsightsDevicesChart({ data }: { data: DeviceConsumption[] }) {
-  const keys = Object.keys(data[0]?.devices);
+  const keys = Object.keys(data[0]?.devices ?? []);
 
   return (
     <div className="w-full">
