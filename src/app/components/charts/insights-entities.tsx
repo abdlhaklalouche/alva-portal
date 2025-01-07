@@ -7,7 +7,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { getRandomBlackShade } from "@/lib/utils";
 import { EntityConsumption } from "@/types/Insights";
 
 const chartConfig = {
