@@ -3,9 +3,26 @@ export type Consumption = {
   value: number;
 };
 
+export type EntityConsumption = {
+  entity: string;
+  consumption: number;
+  fill: string;
+};
+
+export type DeviceConsumption = {
+  date: string;
+  devices: {
+    [key: string]: number;
+  };
+};
+
 export default interface Dashboard {
   consumption: Consumption[];
-  entities: number;
-  rooms: number;
-  devices: number;
+  entities_consumption: EntityConsumption[];
+  devices_consumption: DeviceConsumption[];
+  counts: {
+    entities: number;
+    rooms: number;
+    devices: number;
+  };
 }

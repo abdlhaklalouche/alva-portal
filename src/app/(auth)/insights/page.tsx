@@ -8,6 +8,7 @@ import { InsightsDevicesChart } from "@/app/components/charts/insights-devices";
 import { InsightsEntitiesChart } from "@/app/components/charts/insights-entities";
 import { LoadingSpinner } from "@/app/components/other/spinner";
 import notFound from "@/app/not-found";
+import { Building, HomeIcon, MonitorSpeaker } from "lucide-react";
 import React from "react";
 
 export default () => {
@@ -42,37 +43,8 @@ export default () => {
             />
           </fieldset>
         </div>
-        <div className="flex flex-col grow h-full gap-6 w-full">
-          <div className="h-1/3 bg-white shadow-md rounded-lg flex items-center justify-center px-6 py-3 font-medium gap-8 w-full">
-            {isFetching ? (
-              <div className="h-full flex justify-center items-center w-full">
-                <LoadingSpinner />
-              </div>
-            ) : (
-              <InsightsDevicesChart data={data!.devices_consumption} />
-            )}
-          </div>
-          <div className="grow h-full flex flex-col lg:flex-row justify-between gap-6">
-            <div className="flex flex-col bg-white rounded-lg p-6 shadow-md grow w-full h-full min-h-72">
-              {isFetching ? (
-                <div className="h-full flex justify-center items-center">
-                  <LoadingSpinner />
-                </div>
-              ) : (
-                <DashboardChart data={data!.consumption} />
-              )}
-            </div>
-            <div className="h-full lg:w-96 shrink-0 bg-white shadow-md rounded-lg flex items-center justify-center px-6 py-3 font-medium gap-8">
-              {isFetching ? (
-                <div className="h-full flex justify-center items-center">
-                  <LoadingSpinner />
-                </div>
-              ) : (
-                <InsightsEntitiesChart data={data!.entities_consumption} />
-              )}
-            </div>
-          </div>
-        </div>
+
+        <div className="flex flex-row w-full shrink-0 gap-6"></div>
       </div>
     </PageLayout>
   );

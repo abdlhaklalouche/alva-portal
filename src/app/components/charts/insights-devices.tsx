@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Area, AreaChart, CartesianGrid, Legend, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts";
 
 import {
   ChartConfig,
@@ -9,8 +9,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { DeviceConsumption } from "@/types/Insights";
 import { COLORS } from "@/data/colors";
+import { DeviceConsumption } from "@/types/Dashboard";
 
 const chartConfig = {
   visitors: {
@@ -45,6 +45,7 @@ export function InsightsDevicesChart({ data }: { data: DeviceConsumption[] }) {
             ))}
           </defs>
           <CartesianGrid vertical={false} />
+          <YAxis />
           <XAxis
             dataKey="date"
             tickLine={false}

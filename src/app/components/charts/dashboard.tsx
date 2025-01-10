@@ -1,6 +1,6 @@
 "use client";
 
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import {
   ChartContainer,
@@ -33,6 +33,7 @@ export default function DashboardChart({ data }: { data: Consumption[] }) {
             width={200}
           >
             <CartesianGrid vertical={false} />
+            <YAxis dataKey="value" />
             <XAxis
               dataKey="key"
               tickLine={false}
