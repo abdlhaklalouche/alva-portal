@@ -22,8 +22,8 @@ export default () => {
 
   return (
     <PageLayout
-      name="Insights"
-      description="Your personalized hub for insights."
+      name="Dashboard"
+      description="Your overall data visualization dashboard."
       breadcrumbs={[
         {
           name: "Home",
@@ -34,7 +34,7 @@ export default () => {
         },
       ]}
     >
-      <div className="h-full flex flex-col p-4 space-y-6 mb-8">
+      <div className="flex flex-col p-4 space-y-6 mb-8 pb-12">
         <div className="flex justify-start w-full shrink-0 gap-6">
           <fieldset disabled={isFetching}>
             <Filters
