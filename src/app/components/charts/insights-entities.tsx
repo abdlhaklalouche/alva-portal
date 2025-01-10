@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { Label, Pie, PieChart } from "recharts";
+import { Label, Legend, Pie, PieChart } from "recharts";
 import {
   ChartConfig,
   ChartContainer,
@@ -35,7 +35,7 @@ export function InsightsEntitiesChart({ data }: { data: EntityConsumption[] }) {
             <Pie
               data={data}
               dataKey="consumption"
-              nameKey="entity"
+              nameKey="name"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -69,6 +69,7 @@ export function InsightsEntitiesChart({ data }: { data: EntityConsumption[] }) {
                 }}
               />
             </Pie>
+            <Legend />
           </PieChart>
         </ChartContainer>
       </div>
