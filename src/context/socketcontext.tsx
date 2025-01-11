@@ -23,7 +23,7 @@ export default function SocketContextProvider({
 
   useEffect(() => {
     let socket = io.connect(process.env.NEXT_PUBLIC_BACKEND_URL, {
-      query: {
+      extraHeaders: {
         token: token,
       },
     });

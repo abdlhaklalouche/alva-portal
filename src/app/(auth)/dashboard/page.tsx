@@ -15,7 +15,7 @@ import React from "react";
 export default () => {
   const [period, setPeriod] = React.useState<PeriodState>("month");
 
-  const { data, isFetching, error, refetch } = useGetDashboard({
+  const { data, isFetching, isLoading, error, refetch } = useGetDashboard({
     period: period,
   });
 
@@ -52,7 +52,7 @@ export default () => {
 
         <div className="flex flex-row w-full shrink-0 gap-6">
           <div className="flex-1 bg-white shadow-md rounded-lg flex items-center justify-center px-6 py-3 font-medium gap-8 w-full">
-            {isFetching ? (
+            {isLoading ? (
               <div className="h-full flex justify-center items-center">
                 <LoadingSpinner />
               </div>
@@ -69,7 +69,7 @@ export default () => {
             )}
           </div>
           <div className="flex-1 bg-white shadow-md rounded-lg flex items-center justify-center px-6 py-3 font-medium gap-8 w-full">
-            {isFetching ? (
+            {isLoading ? (
               <div className="h-full flex justify-center items-center">
                 <LoadingSpinner />
               </div>
@@ -86,7 +86,7 @@ export default () => {
             )}
           </div>
           <div className="flex-1 bg-white shadow-md rounded-lg flex items-center justify-center px-6 py-3 font-medium gap-8 w-full">
-            {isFetching ? (
+            {isLoading ? (
               <div className="h-full flex justify-center items-center">
                 <LoadingSpinner />
               </div>
@@ -106,7 +106,7 @@ export default () => {
 
         <div className="flex flex-col grow h-full gap-6 w-full">
           <div className="h-1/3 bg-white shadow-md rounded-lg flex items-center justify-center px-6 py-3 font-medium gap-8 w-full">
-            {isFetching ? (
+            {isLoading ? (
               <div className="h-full flex justify-center items-center w-full">
                 <LoadingSpinner />
               </div>
@@ -116,7 +116,7 @@ export default () => {
           </div>
           <div className="grow h-full flex flex-col lg:flex-row justify-between gap-6">
             <div className="flex flex-col bg-white rounded-lg p-6 shadow-md grow w-full h-full min-h-72">
-              {isFetching ? (
+              {isLoading ? (
                 <div className="h-full flex justify-center items-center">
                   <LoadingSpinner />
                 </div>
@@ -125,7 +125,7 @@ export default () => {
               )}
             </div>
             <div className="h-full lg:w-96 shrink-0 bg-white shadow-md rounded-lg flex items-center justify-center px-6 py-3 font-medium gap-8">
-              {isFetching ? (
+              {isLoading ? (
                 <div className="h-full flex justify-center items-center">
                   <LoadingSpinner />
                 </div>
