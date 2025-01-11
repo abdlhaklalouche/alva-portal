@@ -42,7 +42,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className="h-screen flex flex-col bg-stone-50">
         <AuthProvider user={user} token={token}>
-          <SocketProvider>
+          <SocketProvider token={token}>
             <EntityProvider user={user}>
               <SidebarProvider>
                 <AppSidebar />

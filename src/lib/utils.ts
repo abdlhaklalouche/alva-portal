@@ -15,10 +15,16 @@ export const getTokenFromCookies = (store: ReadonlyRequestCookies): string => {
 };
 
 export const pushNotification = (notification: INotification) => {
-  toast({
+  const toastNotification = toast({
     title: notification.title,
     description: notification.description,
   });
 
-  new Notification(notification.title, { body: notification.description });
+  const browserNotification = new Notification(notification.title, {
+    body: notification.description,
+  });
+
+  browserNotification.addEventListener("close", () => {
+    toastNotification.dismiss();
+  });
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import { toast } from "@/hooks/use-toast";
-import { pushNotification } from "@/lib/utils";
+import { getTokenFromCookies, pushNotification } from "@/lib/utils";
 import INotification from "@/types/INotification";
 import React, { createContext, useEffect, useState } from "react";
 import * as io from "socket.io-client";
@@ -13,14 +13,20 @@ const SocketContext = createContext<SocketContextProps>({
 });
 
 export default function SocketContextProvider({
+  token,
   children,
 }: {
+  token: string;
   children: React.ReactNode;
 }) {
   const [socket, setSocket] = useState<io.Socket>();
 
   useEffect(() => {
-    let socket = io.connect(process.env.NEXT_PUBLIC_BACKEND_URL);
+    let socket = io.connect(process.env.NEXT_PUBLIC_BACKEND_URL, {
+      query: {
+        token: token,
+      },
+    });
 
     setSocket(socket);
 
