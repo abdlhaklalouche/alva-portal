@@ -1,3 +1,5 @@
+import { toast } from "@/hooks/use-toast";
+import INotification from "@/types/INotification";
 import { clsx, type ClassValue } from "clsx";
 import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import { twMerge } from "tailwind-merge";
@@ -10,4 +12,13 @@ export const getTokenFromCookies = (store: ReadonlyRequestCookies): string => {
   const token = store.get("token")?.value;
 
   return token ? `Bearer ${token}` : "";
+};
+
+export const pushNotification = (notification: INotification) => {
+  toast({
+    title: notification.title,
+    description: notification.description,
+  });
+
+  new Notification(notification.title, { body: notification.description });
 };

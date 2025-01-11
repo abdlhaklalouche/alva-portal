@@ -8,17 +8,23 @@ import { InsightsDevicesChart } from "@/app/components/charts/insights-devices";
 import { InsightsEntitiesChart } from "@/app/components/charts/insights-entities";
 import { LoadingSpinner } from "@/app/components/other/spinner";
 import notFound from "@/app/not-found";
+import { useSocket } from "@/context/socketcontext";
 import { Building, HomeIcon, MonitorSpeaker } from "lucide-react";
 import React from "react";
 
 export default () => {
   const [period, setPeriod] = React.useState<PeriodState>("month");
 
-  const { data, isFetching, error } = useGetDashboard({
+  const { data, isFetching, error, refetch } = useGetDashboard({
     period: period,
   });
 
   if (error || (!data && !isFetching)) return notFound();
+
+  const { socket } = useSocket();
+
+  // Refetch dashboard if any change in data.
+  socket?.on("dashboard_changed", () => refetch());
 
   return (
     <PageLayout

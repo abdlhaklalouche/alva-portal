@@ -1,5 +1,8 @@
 "use client";
 
+import { toast } from "@/hooks/use-toast";
+import { pushNotification } from "@/lib/utils";
+import INotification from "@/types/INotification";
 import React, { createContext, useEffect, useState } from "react";
 import * as io from "socket.io-client";
 
@@ -20,6 +23,23 @@ export default function SocketContextProvider({
     let socket = io.connect(process.env.NEXT_PUBLIC_BACKEND_URL);
 
     setSocket(socket);
+
+    // Notifications section
+    socket.on("notification", (notification: INotification) => {
+      if ("Notification" in window) {
+        if (Notification.permission === "granted") {
+          pushNotification(notification);
+        } else {
+          Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+              pushNotification(notification);
+            }
+          });
+        }
+      } else {
+        console.log("Notifications are not supported by this browser.");
+      }
+    });
 
     return () => {
       socket.disconnect();
