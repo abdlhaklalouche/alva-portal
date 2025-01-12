@@ -12,11 +12,7 @@ import {
 import { COLORS } from "@/data/colors";
 import { DeviceConsumption } from "@/types/Dashboard";
 
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-} satisfies ChartConfig;
+const chartConfig = {} satisfies ChartConfig;
 
 export function InsightsDevicesChart({ data }: { data: DeviceConsumption[] }) {
   const keys = Object.keys(data[0]?.devices ?? []);

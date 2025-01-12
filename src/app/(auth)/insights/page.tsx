@@ -6,6 +6,8 @@ import PageLayout from "@/app/components/blocks/page-layout";
 import DashboardChart from "@/app/components/charts/dashboard";
 import { InsightsDevicesChart } from "@/app/components/charts/insights-devices";
 import { InsightsEntitiesChart } from "@/app/components/charts/insights-entities";
+import InsightsPredictionOverallChart from "@/app/components/charts/next-month-usage";
+import InsightsPredictionDeviceChart from "@/app/components/charts/next-month-usage-device";
 import { LoadingSpinner } from "@/app/components/other/spinner";
 import notFound from "@/app/not-found";
 import { Separator } from "@/components/ui/separator";
@@ -15,7 +17,7 @@ import React from "react";
 export default () => {
   const [period, setPeriod] = React.useState<PeriodState>("month");
 
-  const { data, isFetching, error } = useGetInsights({
+  const { data, isFetching, isLoading, error } = useGetInsights({
     period: period,
   });
 
@@ -23,7 +25,7 @@ export default () => {
 
   return (
     <PageLayout
-      name="Insights"
+      name="AI Insights"
       description="Your personalized hub for insights."
       breadcrumbs={[
         {
@@ -35,34 +37,41 @@ export default () => {
         },
       ]}
     >
-      <div className="h-full flex flex-col xl:flex-row p-4 gap-6">
-        <div className="flex flex-col h-auto xl:h-full w-full shrink-0 xl:w-2/6 bg-white rounded-lg shadow-md min-h-60">
-          <div className="p-2">
-            <h2 className="text-xs uppercase text-gray-600">
-              Top 10 consumming devices
-            </h2>
-          </div>
-          <Separator />
-          <div className="p-4"></div>
-        </div>
+      <div className="h-full flex flex-col p-4 gap-6">
         <div className="flex flex-col h-auto h-full w-full gap-6 pb-16 xl:pb-0">
           <div className="grow bg-white rounded-lg shadow-md min-h-60 h-6/4">
             <div className="p-2">
               <h2 className="text-xs uppercase text-gray-600">
-                Next week energy usage prediction per device
+                Next month energy usage prediction per device
               </h2>
             </div>
             <Separator />
-            <div className="p-4"></div>
+            <div className="p-4">
+              {isLoading ? (
+                <div className="h-full flex justify-center items-center">
+                  <LoadingSpinner />
+                </div>
+              ) : (
+                <InsightsPredictionDeviceChart data={data?.devices ?? []} />
+              )}
+            </div>
           </div>
           <div className="h-2/6 bg-white rounded-lg shadow-md min-h-60 xl:min-h-auto">
             <div className="p-2">
               <h2 className="text-xs uppercase text-gray-600">
-                Next week energy usage prediction
+                Next month energy usage prediction
               </h2>
             </div>
             <Separator />
-            <div className="p-2"></div>
+            <div className="p-2">
+              {isLoading ? (
+                <div className="h-full flex justify-center items-center">
+                  <LoadingSpinner />
+                </div>
+              ) : (
+                <InsightsPredictionOverallChart data={data?.overall ?? []} />
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { EntityConsumption } from "@/types/Insights";
+import { EntityConsumption } from "@/types/Dashboard";
 
 const chartConfig = {
   consumption: {
